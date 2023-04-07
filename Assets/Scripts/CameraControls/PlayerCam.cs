@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
@@ -15,6 +11,8 @@ public class PlayerCam : MonoBehaviour
 
     private void Start()
     {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        orientation.rotation = Quaternion.Euler(0, 0, 0);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -40,5 +38,5 @@ public class PlayerCam : MonoBehaviour
 
 
 }
-        
-                 
+
+

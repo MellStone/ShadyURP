@@ -178,7 +178,9 @@ MonoBehaviour:
   jumpForce: 6
   jumpCooldown: 1
   airMultiplayer: 0.4
+  crouchCooldown: 0.4
   jumpKey: 32
+  crouchKey: 306
   playerheight: 2
   whatIsGround:
     serializedVersion: 2
