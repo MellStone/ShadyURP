@@ -5,6 +5,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("movement")]
     public float moveSpeed;
     public float crouchMoveSpeed;
+    private float normalMoveSpeed;
+    public float sprintMoveSpeed;
 
     public float GroundDrag;
 
@@ -16,10 +18,12 @@ public class PlayerMovement : MonoBehaviour
     bool readyToCrouch;
     bool readyToJump;
     bool isCrouching;
+    bool isSprinting;
 
     [Header("keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode crouchKey = KeyCode.LeftControl;
+    public KeyCode sprintKey = KeyCode.LeftShift;
 
 
 
@@ -43,13 +47,16 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         
+        normalMoveSpeed = moveSpeed;
+
         normalSize = transform.localScale;
-        crouchSize = new Vector3(0.4f, 0.4f, 0.4f);
+        crouchSize = new Vector3(1f, 0.6f, 1f);
         ResetJump();
 
         readyToJump = true;
         readyToCrouch = true;
         isCrouching = false;
+        isSprinting = false;
     }
 
     private void Update()
@@ -96,6 +103,10 @@ public class PlayerMovement : MonoBehaviour
 
             Invoke(nameof(ResetCrouch), crouchCooldown);
         }
+        if (Input.GetKeyDown(sprintKey) && grounded)
+        {
+            Sprint();
+        }
     }
 
     private void MovePlayer()
@@ -127,12 +138,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isCrouching)
         {
-            transform.localScale = Vector3.Lerp(normalSize, crouchSize, 0.4f);
+            transform.localScale = crouchSize;
+            moveSpeed *= crouchMoveSpeed;
             isCrouching = true;
         }
         else
         {
-            transform.localScale = Vector3.Lerp(crouchSize, normalSize, 1);
+            transform.localScale = normalSize;
+            moveSpeed = normalMoveSpeed;
             isCrouching = false;
         }
     }
@@ -144,6 +157,20 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
+    private void Sprint()
+    {
+        if (!isSprinting)
+        {
+            moveSpeed *= sprintMoveSpeed;
+            isSprinting = true;
+        }
+        else
+        {
+            moveSpeed = normalMoveSpeed;
+            isSprinting = false;
+        }
+    }
+
     private void ResetCrouch()
     {
         readyToCrouch = true;
@@ -153,11 +180,3 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
     }
 }
-
-
-
-
-
-
-
-
